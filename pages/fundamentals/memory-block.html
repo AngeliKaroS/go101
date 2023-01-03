@@ -1,38 +1,33 @@
 <h1>Memory Blocks</h1>
 
 <p>
-Go is a language which supports automatic memory management,
-such as automatic memory allocation and automatic garbage collection.
-So Go programmers can do programming without handling the underlying verbose memory management.
-This not only brings much convenience and saves Go programmers lots of time,
-but also helps Go programmers avoid many careless bugs.
+Go 언어는 자동 메모리 할당과 자동 가비지 컬렉션이 메모리 관리를 지원하는 언어이다.
+그래서 Go 프로그래머들은 숨겨져 있는 메모리 관리에 대한 것들을 손대지 않고도 프로그래밍이 가능하다.
+자동 메모리 관리 기능은 편리하기도 하지만 Go 프로그래머들의 많은 시간을 아껴줄 수 있을 뿐만 아니라
+Go 프로그래머의 부주의로 인한 버그를 만들어내지 않도록 도와준다.
 </p>
 
 <p>
-Although knowing the underlying memory management implementation details is not necessary
-for Go programmers to write Go code, understanding some concepts and being aware of some facts
-in the memory management implementation by the standard Go compiler and runtime is very
-helpful for Go programmers to write high quality Go code.
+Go 프로그래머들은 Go 코드를 작성하기 위해 메모리 관리에 대한 구현을 세부적으로 알 필요는 없지만,
+표준 Go 컴파일러와 런타임에 의한 메모리 관리 구현의 몇가지 사실과 개념을 이해한다면
+더욱 고품질의 Go 코드를 작성할 수 있도록 도움을 준다.
 </p>
 
 <p>
-This article will explain some concepts and list some facts of the implementation of
-memory block allocation and garbage collection by the standard Go compiler and runtime.
-Other aspects, such as memory apply and memory release in memory management,
-will not be touched in this article.
+이 글에서는 표준 Go 컴파일러와 런타임에 대한
+메모리 블록 할당과 가비지 컬렉션에 대한 몇가지 사실과 개념들을 설명한다.
+다만 메모리 할당과 해제와 같은 메모리 관리는 이 글에서 다루지는 않는다.
 </p>
 
 <a class="anchor" id="memory-block"></a>
 <h3>Memory Blocks</h3>
 
 <p>
-A memory block is a continuous memory segment to host
-<a href="value-part.html">value parts</a> at run time.
-Different memory blocks may have different sizes, to host different value parts.
-One memory block may host multiple value parts at the same time,
-but each value part can only be hosted within one memory block,
-no matter how large the size of that value part is.
-In other words, for any value part, it never crosses memory blocks.
+메모리 블록은 런타임에 value parts를 제공하는 연속 메모리 세그먼트이다.
+각각의 메모리 블록들은 서로 다른 value parts를 제공하기 위해 다른 크기를 가질 수 있다.
+한 메모리 블록은 한번에 여러개의 value parts를 동시에 제공 할 수 있으나,
+각 value part는 그 크기가 얼마나 크든 관계 없이 단 하나의 메모리 블록만을 가질 수 있다.
+즉 모든 value part는 메모리 블록을 초과 하지 않는다.
 </p>
 
 <div>
